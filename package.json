@@ -4,12 +4,13 @@
   "description": "CRUD API built with TypeScript. Serves as backend to bugdet app",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev ./src/server.ts",
+    "dev": "ts-node-dev ./src/index.ts",
     "test": "jest --watchAll --no-cache"
   },
   "author": "Milos Karaklajic",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.4.1"
   },
