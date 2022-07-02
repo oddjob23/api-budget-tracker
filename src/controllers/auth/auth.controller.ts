@@ -87,7 +87,10 @@ router.post(
     req.session = {
       jwt: userJwt,
     };
-    return res.send(200).send(existingUser);
+    return res.status(200).send({
+      token: userJwt,
+      ...existingUser,
+    });
   }
 );
 export { router as AuthenticationRouter };

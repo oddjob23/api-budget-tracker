@@ -48,4 +48,4 @@ userSchema.statics.insert = (input: IUserInput): UserDoc => {
 
 const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
 
-export { User };
+export { User, UserDoc };

@@ -19,14 +19,25 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.session?.jwt) {
+  let token: string = "";
+  let authHeader = req.headers.authorization as String;
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.substring(7, authHeader.length);
+  } else {
+    token = "";
+  }
+
+  if (!req.session?.jwt && !token) {
     return next();
   }
+  token = req.session?.jwt ? req.session.jwt : token;
   try {
-    const payload = jwt.verify(
-      req.session.jwt,
-      process.env.JWT_KEY
-    ) as UserPayload;
+    const payload = jwt.verify(token, process.env.JWT_KEY!) as UserPayload;
+
     req.user = payload;
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
+  next();
 };

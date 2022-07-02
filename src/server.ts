@@ -5,6 +5,9 @@ import { AuthenticationRouter } from "./controllers/auth/auth.controller";
 import cookieSession from "cookie-session";
 import { ErrorHandler } from "./middlewares/ErrorHandler";
 import { NotFoundError } from "./errors/NotFoundError";
+import { TransactionRotuer } from "./controllers/transactions/transaction.controller";
+import { currentUser } from "./middlewares/CurrentUser";
+import { requireAuth } from "./middlewares/RequireAuth";
 
 const app = express();
 
@@ -18,6 +21,7 @@ app.use(
 );
 
 app.use("/api/v1/auth", AuthenticationRouter);
+app.use("/api/v1/transactions", [currentUser, requireAuth], TransactionRotuer);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
