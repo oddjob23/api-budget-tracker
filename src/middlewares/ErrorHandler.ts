@@ -10,6 +10,7 @@ export const ErrorHandler = (
   if (err instanceof BaseError) {
     return res.status(err.statusCode).send({ errors: err.serializeError() });
   }
+  console.log(err);
   return res.status(400).send({
     errors: [{ message: "Unhandled error" }],
   });
