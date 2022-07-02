@@ -41,3 +41,11 @@ userSchema.pre("save", async function (done) {
   }
   done();
 });
+
+userSchema.statics.insert = (input: IUserInput): UserDoc => {
+  return new User(input);
+};
+
+const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
+
+export { User };

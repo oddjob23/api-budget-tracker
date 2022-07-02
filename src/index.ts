@@ -1,5 +1,6 @@
 import "dotenv/config";
 import mongoose from "mongoose";
+import { DatabaseConnectionError } from "./errors/DatabaseConnectionError";
 
 import { app } from "./server";
 
@@ -18,7 +19,7 @@ const start = async () => {
   } catch (err: any) {
     console.log("error connecting to db");
     console.error(err);
-    throw new Error(err.message);
+    throw new DatabaseConnectionError();
   }
 
   app.listen(port, () => {
