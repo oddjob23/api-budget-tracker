@@ -64,4 +64,4 @@ const TransactionModel = mongoose.model<TransactionDoc, TransactionModel>(
   transactionSchema
 );
 
-export { TransactionModel };
+export { TransactionModel, TransactionDoc };

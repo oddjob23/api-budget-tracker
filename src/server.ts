@@ -9,6 +9,7 @@ import { TransactionRotuer } from "./controllers/transactions/transaction.contro
 import { currentUser } from "./middlewares/CurrentUser";
 import { requireAuth } from "./middlewares/RequireAuth";
 import { CategoryRouter } from "./controllers/categories/categories.controller";
+import { BudgetRouter } from "./controllers/budget/budget.controller";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(
 app.use("/api/v1/auth", AuthenticationRouter);
 app.use("/api/v1/transactions", [currentUser, requireAuth], TransactionRotuer);
 app.use("/api/v1/categories", [currentUser, requireAuth], CategoryRouter);
+app.use("/api/v1/budgets", [currentUser, requireAuth], BudgetRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();
