@@ -44,11 +44,30 @@ describe("Transactiosn - Create", () => {
         date: new Date().toLocaleDateString(),
       });
 
-    console.log(res.body.errors);
-
     expect(res.statusCode).toEqual(201);
 
     const transactions = await TransactionModel.find({});
     expect(transactions.length).toBe(1);
+  });
+  it("should return status code 201 and succesfully save transaction with category", async () => {
+    const cookie = await signin();
+    const cat = await request(app)
+      .post("/api/v1/categories")
+      .set("Cookie", cookie)
+      .send({ name: "test" })
+      .expect(201);
+    const res = await request(app)
+      .post("/api/v1/transactions")
+      .set("Cookie", cookie)
+      .send({
+        amount: 12310,
+        name: "This is a test transaction",
+        description: "Test",
+        date: new Date().toLocaleDateString(),
+        category: cat.body._id,
+      })
+      .expect(201);
+
+    expect(res.body.category).toBeDefined();
   });
 });

@@ -6,6 +6,7 @@ interface ITransactionInput {
   name: string;
   description?: string;
   date?: Date;
+  category?: string;
 }
 
 interface TransactionModel extends mongoose.Model<TransactionDoc> {
@@ -43,6 +44,10 @@ const transactionSchema = new mongoose.Schema(
     user: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+    },
+    category: {
+      type: mongoose.Types.ObjectId,
+      ref: "Category",
     },
   },
   {

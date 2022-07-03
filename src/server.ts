@@ -8,6 +8,7 @@ import { NotFoundError } from "./errors/NotFoundError";
 import { TransactionRotuer } from "./controllers/transactions/transaction.controller";
 import { currentUser } from "./middlewares/CurrentUser";
 import { requireAuth } from "./middlewares/RequireAuth";
+import { CategoryRouter } from "./controllers/categories/categories.controller";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(
 
 app.use("/api/v1/auth", AuthenticationRouter);
 app.use("/api/v1/transactions", [currentUser, requireAuth], TransactionRotuer);
+app.use("/api/v1/categories", [currentUser, requireAuth], CategoryRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

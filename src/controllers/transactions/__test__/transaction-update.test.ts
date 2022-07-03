@@ -98,4 +98,29 @@ describe("Transaction update PUT", () => {
     expect(updatedTransaction3.body.name).toEqual("test");
     expect(updatedTransaction3.body.description).toEqual("test");
   });
+  it("should update transaction with provided category", async () => {
+    const token = await signin();
+    const cat = await request(app)
+      .post("/api/v1/categories")
+      .set("Cookie", token)
+      .send({ name: "test" })
+      .expect(201);
+    const transaction = await request(app)
+      .post("/api/v1/transactions")
+      .set("Cookie", token)
+      .send({
+        name: "test",
+        amount: 1,
+      });
+
+    const updatedTransaction = await request(app)
+      .put(`/api/v1/transactions/${transaction.body._id}`)
+      .set("Cookie", token)
+      .send({
+        category: cat.body._id,
+      });
+
+    expect(updatedTransaction.statusCode).toEqual(200);
+    expect(updatedTransaction.body.category).toBeDefined();
+  });
 });

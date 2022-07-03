@@ -16,6 +16,7 @@ interface InputData {
   description?: string;
   date?: Date;
   user: string;
+  category?: string;
 }
 
 router.post(
@@ -32,10 +33,11 @@ router.post(
       ),
     body("description").optional().isString().notEmpty(),
     body("date").optional(),
+    body("category").optional().isString().notEmpty(),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { amount, name, description, date } = req.body;
+    const { amount, name, description, date, category } = req.body;
     const user = req.user;
 
     if (!user) {
@@ -53,9 +55,17 @@ router.post(
     if (date) {
       inputData.date = date;
     }
-    const transaction = await TransactionModel.insert(inputData);
-    await transaction.save();
-    res.status(201).send(transaction);
+    if (category) {
+      inputData.category = category;
+    }
+    try {
+      const transaction = await TransactionModel.insert(inputData);
+      await transaction.save();
+      res.status(201).send(transaction);
+    } catch (err) {
+      console.log(err);
+      throw new BadRequestError("Something went wrong");
+    }
   }
 );
 
@@ -100,7 +110,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { amount, name, description } = req.body;
+  const { amount, name, description, category } = req.body;
   const user = req.user;
 
   if (!user) {
@@ -124,6 +134,9 @@ router.put("/:id", async (req: Request, res: Response) => {
     }
     if (description) {
       data.description = description;
+    }
+    if (category) {
+      data.category = category;
     }
 
     transaction = await TransactionModel.findOneAndUpdate({ id }, data, {
